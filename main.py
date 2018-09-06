@@ -18,7 +18,6 @@ class FetchAndUpdate:
     def fetch_shopify_orders(self):
         """
         """
-        print("ehehhehe")
         obj = ShopifyOrderFetchClass(self.site_url, self.access_token)
         obj.get_the_orders()
 

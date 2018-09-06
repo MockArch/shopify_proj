@@ -27,14 +27,32 @@ class ShopifyOrderFetchClass(object):
         if data.status == 200:
             data1 = data.read().decode("utf-8")
             rep = json.loads(data1)
+            print(json.dumps(rep['orders'][0]['total_price'], indent=4))
             for i in rep['orders']:
-                sender_pincode = i['line_items'][0]['origin_location']['zip']
-                reciever_pincode = i['shipping_address']['zip']
+                sender = i['line_items'][0]['origin_location']
+                reciever = i['shipping_address']
                 is_code = True if i['gateway'] == 'Cash on Delivery (COD)' else False
-                count =  i['line_items'][0]['quantity']
+                count =  i['line_items'][0]['quantity'],
+                totalprice = i['total_price']
+                invoice_num = i['line_items'][0]['id']
+                weight = i['line_items'][0]['grams']
+                email = i['contact_email']
+                contain = i['line_items'][0]['name']
 
-                obj = FecthTheEczRate(sender_pincode, reciever_pincode, is_code, count)
-                obj.fetch_the_rates()
+
+
+                obj = FecthTheEczRate(
+                    sender, 
+                    reciever,
+                    is_code, 
+                    count,
+                    totalprice,
+                    invoice_num,
+                    weight,
+                    email,
+                    contain
+                     )
+                obj.fetch_the_rates()     
             
                 
         else:
