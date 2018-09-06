@@ -14,9 +14,9 @@ class ShopifyOrderFetchClass(object):
         self.siteUrl = None
         self.accessToken = None
         self.headers = {
-            'x-shopify-access-token': access_token
+            'x-shopify-access-token': access_token,
+            'Content-type': 'application/json'
         }
-        print(site_url)
         self.conn = http.client.HTTPSConnection(site_url)
 
     def get_the_orders(self):
@@ -61,6 +61,37 @@ class ShopifyOrderFetchClass(object):
             print("something went wrong response status code is %s" % str(data.status))
             print(data.read().decode("utf-8"))
 
-    def _status_check(self, obj):
-        pass
-                
+    def update_order(self, order_id, tracking_no):
+        """
+        """
+        location_id = 0
+        url = '/admin/orders/' + str(order_id) +'/fulfillments.json'
+        self.conn.request("GET", "/admin/locations.json",  headers=self.headers)
+        loc_data = self.conn.getresponse()
+        if loc_data.status == 200:
+            rep = json.loads(loc_data.read().decode("utf-8"))
+            location_id = rep['locations'][0]['id']
+        else:
+            print("something went wrong response status code is %s" % str(loc_data.status))
+            print(loc_data.read().decode("utf-8"))
+        self.conn.close()
+        print(location_id)    
+        payload = {
+            "fulfillment": {
+                "location_id": location_id,
+                "tracking_number": str(tracking_no),
+                "tracking_urls": [
+                    'www.test.com/tracking'
+                ],
+                "notify_customer": True
+            }
+            }    
+        self.conn.request("POST",url, body= json.dumps(payload), headers=self.headers)
+        resp_data =  self.conn.getresponse()
+        if resp_data.status == 200:
+            rep = json.loads(resp_data.read().decode("utf-8"))
+            print(rep)
+        else:
+            print("something went wrong response status code is %s" % str(resp_data.status))
+            print(resp_data.read().decode("utf-8"))  
+        

@@ -23,9 +23,12 @@ class FetchAndUpdate:
 
 
     def update_shopify(self, order_id, trcking_numebr):
-        pass
+        """
+        """
+        obj = ShopifyOrderFetchClass(self.site_url, self.access_token)
+        obj.update_order(order_id, trcking_numebr)
 
 
 
 t = FetchAndUpdate(site_url='seelftest.myshopify.com',access_token='0c7b2d0e418cf53b2f961551b43ff3d2')
-t.fetch_shopify_orders()
+t.update_shopify("610922233969", "2312312")
