@@ -80,10 +80,10 @@ class FecthTheEczRate(object):
                 },
                 "name": self.reciever['name']
             },
-            "product_id": "9b7ae231-2077-4a99-a69c-8c5331fa62b4;9b7ae231-2077-4a99-a69c-8c5331fa62b4",
+            "product_id": pc, # product_id
             "is_test_booking": False,
             "alert_receiver": True,
             "is_multi_packet_shipment": True,
             "customer_reference": "123128731982"
         }
-        print(label_request)
+        print(json.dumps(label_request, indent=4))

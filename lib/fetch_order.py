@@ -31,16 +31,19 @@ class ShopifyOrderFetchClass(object):
             for i in rep['orders']:
                 sender = i['line_items'][0]['origin_location']
                 reciever = i['shipping_address']
-                is_code = True if i['gateway'] == 'Cash on Delivery (COD)' else False
-                count =  i['line_items'][0]['quantity'],
                 totalprice = i['total_price']
-                invoice_num = i['line_items'][0]['id']
-                weight = i['line_items'][0]['grams']
-                email = i['contact_email']
-                contain = i['line_items'][0]['name']
-
-
-
+                is_code = True if i['gateway'] == 'Cash on Delivery (COD)' else False
+                count = 2
+                weight = 0
+                contain = ""
+                invoice_num = None
+                for it in i['line_items']:
+                    couit = it['quantity'] + count
+                    invoice_num = it['id']
+                    weight = it['grams'] + weight
+                    email = i['contact_email']
+                    contain = it['name'] + ',' + contain
+                   
                 obj = FecthTheEczRate(
                     sender, 
                     reciever,
@@ -52,8 +55,7 @@ class ShopifyOrderFetchClass(object):
                     email,
                     contain
                      )
-                obj.fetch_the_rates()     
-            
+                obj.fetch_the_rates()
                 
         else:
             print("something went wrong response status code is %s" % str(data.status))
