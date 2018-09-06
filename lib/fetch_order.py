@@ -34,7 +34,7 @@ class ShopifyOrderFetchClass(object):
                 count =  i['line_items'][0]['quantity']
 
                 obj = FecthTheEczRate(sender_pincode, reciever_pincode, is_code, count)
-                    
+                obj.fetch_the_rates()
             
                 
         else:
